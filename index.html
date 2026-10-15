@@ -3,130 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>文学手记</title>
+<title>韩中互译</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
-    background: #f5f0e8;
-    color: #3a3a3a;
-    line-height: 1.9;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
   }
-  .container {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 60px 24px;
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 900px;
+    overflow: hidden;
   }
-  header {
+  .header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 24px 32px;
     text-align: center;
-    padding-bottom: 40px;
-    border-bottom: 1px solid #d4c9b5;
-    margin-bottom: 50px;
   }
-  header h1 {
-    font-size: 2.2em;
-    font-weight: normal;
-    letter-spacing: 0.3em;
-    color: #5c4a3a;
-    margin-bottom: 12px;
+  .header h1 { font-size: 1.5em; font-weight: 600; letter-spacing: 2px; }
+  .header p { font-size: 0.85em; opacity: 0.8; margin-top: 6px; }
+  .lang-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    background: #f8f9ff;
+    border-bottom: 1px solid #e8e8f0;
   }
-  header .subtitle {
+  .lang-tag {
     font-size: 0.95em;
-    color: #8a7b6b;
-    letter-spacing: 0.1em;
+    font-weight: 600;
+    color: #555;
   }
-  .quote {
-    background: #ede6d8;
-    border-left: 3px solid #b8a080;
-    padding: 24px 28px;
-    margin: 40px 0;
-    font-style: italic;
-    color: #5c4a3a;
+  .swap-btn {
+    background: #667eea;
+    color: #fff;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.3s;
   }
-  .quote .author {
-    display: block;
-    text-align: right;
-    margin-top: 12px;
-    font-size: 0.9em;
-    color: #8a7b6b;
+  .swap-btn:hover { transform: rotate(180deg); }
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
   }
-  section {
-    margin-bottom: 50px;
+  .panel {
+    padding: 20px 24px;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
   }
-  section h2 {
-    font-size: 1.4em;
-    font-weight: normal;
-    color: #5c4a3a;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed #c9b99a;
-  }
-  .entry {
-    margin-bottom: 28px;
-  }
-  .entry .title {
+  .panel.left { border-right: 1px solid #eee; }
+  textarea {
+    width: 100%;
+    flex: 1;
+    border: none;
+    outline: none;
+    resize: none;
     font-size: 1.1em;
-    color: #6b5540;
-    margin-bottom: 6px;
+    line-height: 1.7;
+    font-family: inherit;
+    color: #333;
+    background: transparent;
   }
-  .entry .date {
+  textarea::placeholder { color: #bbb; }
+  .result {
+    flex: 1;
+    font-size: 1.1em;
+    line-height: 1.7;
+    color: #333;
+    overflow-y: auto;
+  }
+  .result.placeholder { color: #bbb; }
+  .footer {
+    padding: 14px 32px;
+    background: #f8f9ff;
+    border-top: 1px solid #e8e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8em;
+    color: #999;
+  }
+  .copy-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 4px 12px;
+    cursor: pointer;
+    color: #666;
     font-size: 0.85em;
-    color: #a89880;
-    margin-bottom: 10px;
   }
-  .entry p {
-    text-indent: 2em;
-    color: #4a4a4a;
-  }
-  footer {
-    text-align: center;
-    padding-top: 40px;
-    border-top: 1px solid #d4c9b5;
-    font-size: 0.85em;
-    color: #a89880;
+  .copy-btn:hover { background: #f0f0f5; }
+  .loading { color: #aaa; font-style: italic; }
+  @media (max-width: 600px) {
+    .main { grid-template-columns: 1fr; }
+    .panel.left { border-right: none; border-bottom: 1px solid #eee; }
   }
 </style>
 </head>
 <body>
-<div class="container">
-
-  <header>
-    <h1>文学手记</h1>
-    <div class="subtitle">— 文字是随身携带的避难所 —</div>
-  </header>
-
-  <div class="quote">
-    "我们所有的人，都在阴沟里，但仍有人仰望星空。"
-    <span class="author">—— 王尔德</span>
+<div class="card">
+  <div class="header">
+    <h1>한중 번역기</h1>
+    <p>韩中互译 · 在线翻译小工具</p>
   </div>
-
-  <section>
-    <h2>近期书摘</h2>
-    <div class="entry">
-      <div class="title">《夜晚的潜水艇》</div>
-      <div class="date">陈春成</div>
-      <p>我在暗蓝色的海上漂流，海水在暮色中变得像一块旧绸子。这艘潜水艇是我的，谁也不知道它的存在，我要开着它去海底，看珊瑚丛里的宫殿。</p>
+  <div class="lang-bar">
+    <span class="lang-tag" id="langLeft">한국어</span>
+    <button class="swap-btn" onclick="swapLang()">⇄</button>
+    <span class="lang-tag" id="langRight">中文</span>
+  </div>
+  <div class="main">
+    <div class="panel left">
+      <textarea id="inputText" placeholder="여기에 입력하세요..." oninput="debounceTranslate()"></textarea>
     </div>
-    <div class="entry">
-      <div class="title">《人间失格》</div>
-      <div class="date">太宰治</div>
-      <p>胆小鬼连幸福都会害怕，碰到棉花都会受伤，有时也会被幸福所伤。</p>
+    <div class="panel right">
+      <div class="result placeholder" id="outputText">翻译结果将显示在这里</div>
     </div>
-  </section>
-
-  <section>
-    <h2>随笔</h2>
-    <div class="entry">
-      <div class="title">深夜读书记</div>
-      <div class="date">2026.10.15</div>
-      <p>窗外下着小雨，台灯暖黄。翻到某一页，忽然被一句话击中——原来有些人写下的不是字，是时间的碎片，刚好落在你此刻的心事上。</p>
-    </div>
-  </section>
-
-  <footer>
-    © 2026 文学手记 · 用文字记录生活
-  </footer>
-
+  </div>
+  <div class="footer">
+    <span>输入即自动翻译 · 由 Google Translate 提供接口</span>
+    <button class="copy-btn" onclick="copyResult()">复制结果</button>
+  </div>
 </div>
+
+<script>
+  let leftLang = 'ko';
+  let rightLang = 'zh-CN';
+  let timer = null;
+
+  function debounceTranslate() {
+    clearTimeout(timer);
+    timer = setTimeout(translate, 600);
+  }
+
+  async function translate() {
+    const text = document.getElementById('inputText').value.trim();
+    const out = document.getElementById('outputText');
+    if (!text) {
+      out.textContent = '翻译结果将显示在这里';
+      out.classList.add('placeholder');
+      return;
+    }
+    out.textContent = '翻译中...';
+    out.classList.remove('placeholder');
+    try {
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${leftLang}&tl=${rightLang}&dt=t&q=${encodeURIComponent(text)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      let result = '';
+      data[0].forEach(item => { result += item[0]; });
+      out.textContent = result;
+      out.classList.remove('placeholder');
+    } catch (e) {
+      out.textContent = '翻译出错了，请检查网络后重试';
+    }
+  }
+
+  function swapLang() {
+    const input = document.getElementById('inputText');
+    const output = document.getElementById('outputText');
+    const tmp = leftLang;
+    leftLang = rightLang;
+    rightLang = tmp;
+    document.getElementById('langLeft').textContent = leftLang === 'ko' ? '한국어' : '中文';
+    document.getElementById('langRight').textContent = rightLang === 'ko' ? '한국어' : '中文';
+    input.placeholder = leftLang === 'ko' ? '여기에 입력하세요...' : '在此输入中文...';
+    input.value = output.classList.contains('placeholder') ? '' : output.textContent;
+    translate();
+  }
+
+  function copyResult() {
+    const out = document.getElementById('outputText');
+    if (out.classList.contains('placeholder')) return;
+    navigator.clipboard.writeText(out.textContent).then(() => {
+      alert('已复制到剪贴板');
+    });
+  }
+</script>
 </body>
 </html>
