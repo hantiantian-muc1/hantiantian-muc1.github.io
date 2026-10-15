@@ -1,154 +1,98 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>韩中常用语学习卡片</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh; padding: 30px 16px;
-  }
-  .header { text-align: center; color: #fff; margin-bottom: 30px; }
-  .header h1 { font-size: 1.6em; margin-bottom: 8px; }
-  .header p { opacity: 0.8; font-size: 0.9em; }
-  .tabs {
-    display: flex; justify-content: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;
-  }
-  .tab {
-    background: rgba(255,255,255,0.2); color: #fff; border: none;
-    padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 0.9em;
-    transition: all 0.2s;
-  }
-  .tab.active { background: #fff; color: #667eea; font-weight: 600; }
-  .grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px; max-width: 900px; margin: 0 auto;
-  }
-  .card {
-    perspective: 1000px; height: 160px; cursor: pointer;
-  }
-  .card-inner {
-    position: relative; width: 100%; height: 100%;
-    transition: transform 0.5s; transform-style: preserve-3d;
-  }
-  .card.flipped .card-inner { transform: rotateY(180deg); }
-  .card-front, .card-back {
-    position: absolute; width: 100%; height: 100%;
-    backface-visibility: hidden; border-radius: 14px;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 16px; text-align: center;
-  }
-  .card-front {
-    background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
-  .card-front .kr { font-size: 1.35em; color: #333; font-weight: 600; margin-bottom: 8px; }
-  .card-front .pron { font-size: 0.95em; color: #888; font-style: italic; }
-  .card-front .hint { font-size: 0.72em; color: #ccc; margin-top: 10px; }
-  .card-back {
-    background: linear-gradient(135deg, #667eea, #764ba2); color: #fff;
-    transform: rotateY(180deg); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  }
-  .card-back .zh { font-size: 1.3em; margin-bottom: 8px; }
-  .card-back .pron { font-size: 0.85em; opacity: 0.85; }
-  .footer { text-align: center; color: rgba(255,255,255,0.6); margin-top: 30px; font-size: 0.8em; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人主页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f7f9fb;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            background: #fff;
+            max-width: 640px;
+            width: 100%;
+            padding: 56px 48px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        /* 照片占位区：换成自己的照片时，替换 img 的 src 即可 */
+        .photo {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 28px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #eef2f5;
+        }
+
+        .photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7a8d;
+            font-size: 15px;
+            margin-bottom: 28px;
+        }
+
+        .divider {
+            width: 48px;
+            height: 3px;
+            background: #4a90d9;
+            border-radius: 2px;
+            margin: 0 auto 28px;
+        }
+
+        .intro {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #555;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
+    <div class="card">
+        <!-- 照片占位区：把 src 换成自己的照片路径即可 -->
+        <div class="photo">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=minimalist%20portrait%20avatar%20of%20a%20young%20person%2C%20soft%20studio%20lighting%2C%20clean%20light%20blue%20background%2C%20friendly%20smile%2C%20professional%20headshot%2C%20high%20quality&image_size=square" alt="个人照片">
+        </div>
 
-<div class="header">
-  <h1>한중 카드 · 韩中学习卡片</h1>
-  <p>正面：韩文+发音 · 点卡片翻转看中文意思</p>
-</div>
+        <h1>你好，我是小明</h1>
+        <p class="subtitle">学生 · 热爱技术与生活</p>
 
-<div class="tabs">
-  <button class="tab active" onclick="showTab('greet', this)">日常问候</button>
-  <button class="tab" onclick="showTab('number', this)">数字</button>
-  <button class="tab" onclick="showTab('food', this)">饮食</button>
-  <button class="tab" onclick="showTab('daily', this)">日常短句</button>
-</div>
+        <div class="divider"></div>
 
-<div class="grid" id="grid"></div>
-
-<div class="footer">点击卡片翻转 · 共 32 张卡片</div>
-
-<script>
-  const data = {
-    greet: [
-      { kr: "안녕하세요", zh: "你好", pron: "啊尼哟哈塞哟" },
-      { kr: "안녕히 가세요", zh: "再见（对走的人说）", pron: "啊尼哟 hi 卡塞哟" },
-      { kr: "안녕히 계세요", zh: "再见（对留的人说）", pron: "啊尼哟 hi 给塞哟" },
-      { kr: "감사합니다", zh: "谢谢", pron: "康撒哈密哒" },
-      { kr: "죄송합니다", zh: "对不起", pron: "催松哈密哒" },
-      { kr: "괜찮아요", zh: "没关系/还好", pron: "宽恰那哟" },
-      { kr: "네", zh: "是/好的", pron: "内" },
-      { kr: "아니요", zh: "不是/没有", pron: "啊你哟" }
-    ],
-    number: [
-      { kr: "하나", zh: "1", pron: "哈那" },
-      { kr: "둘", zh: "2", pron: "嘟尔" },
-      { kr: "셋", zh: "3", pron: "赛" },
-      { kr: "넷", zh: "4", pron: "内" },
-      { kr: "다섯", zh: "5", pron: "塔索" },
-      { kr: "여섯", zh: "6", pron: "哟索" },
-      { kr: "일곱", zh: "7", pron: "一高" },
-      { kr: "여덟", zh: "8", pron: "哟多尔" }
-    ],
-    food: [
-      { kr: "김치", zh: "泡菜", pron: "kim七" },
-      { kr: "불고기", zh: "烤肉", pron: "铺尔高一" },
-      { kr: "비빔밥", zh: "拌饭", pron: "比比姆巴布" },
-      { kr: "냉면", zh: "冷面", pron: "内明" },
-      { kr: "떡볶이", zh: "炒年糕", pron: "ttok波gi" },
-      { kr: "삼겹살", zh: "五花肉", pron: "萨姆gop萨尔" },
-      { kr: "라면", zh: "拉面", pron: "拉明" },
-      { kr: "커피", zh: "咖啡", pron: "靠皮" }
-    ],
-    daily: [
-      { kr: "화장실이 어디예요?", zh: "洗手间在哪？", pron: "花张西里 哦迪耶哟" },
-      { kr: "이거 얼마예요?", zh: "这个多少钱？", pron: "一果 奥勒马耶哟" },
-      { kr: "조금만 주세요", zh: "请给我一点", pron: "凑根曼 朱塞哟" },
-      { kr: "또 만나요", zh: "下次见", pron: "斗 曼纳哟" },
-      { kr: "맛있게 드세요", zh: "请慢用", pron: "马西给 的塞哟" },
-      { kr: "도와주세요", zh: "请帮帮我", pron: "斗哇朱塞哟" },
-      { kr: "천천히 말씀해 주세요", zh: "请说慢一点", pron: "区区尼 马尔塞梅 朱塞哟" },
-      { kr: "한국어를 못해요", zh: "我不会韩语", pron: "韩古高勒 莫太哟" }
-    ]
-  };
-
-  function render(cat) {
-    const grid = document.getElementById('grid');
-    grid.innerHTML = '';
-    data[cat].forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.onclick = function() { this.classList.toggle('flipped'); };
-      card.innerHTML = `
-        <div class="card-inner">
-          <div class="card-front">
-            <div class="kr">${item.kr}</div>
-            <div class="pron">${item.pron}</div>
-            <div class="hint">点我看中文意思</div>
-          </div>
-          <div class="card-back">
-            <div class="zh">${item.zh}</div>
-            <div class="pron">${item.kr} · ${item.pron}</div>
-          </div>
-        </div>`;
-      grid.appendChild(card);
-    });
-  }
-
-  function showTab(cat, btn) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    render(cat);
-  }
-
-  render('greet');
-</script>
-</body>
-</html>
+        <p class="intro">
+            欢迎来到我的个人主页！我是一名对世界充满好奇的学生，目前专注于计算机视觉与嵌入式系统的学习。
+            平时喜欢写代码、读论文，也喜欢在闲暇时跑步和摄影。我相信技术可以让生活变得更美好，
+            希望能通过不断的学习与实践，做出真正有价值的东西。
+        </p>
+    </div>
