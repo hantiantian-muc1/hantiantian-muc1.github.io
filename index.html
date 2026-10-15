@@ -39,77 +39,39 @@
     background: #f8f9ff;
     border-bottom: 1px solid #e8e8f0;
   }
-  .lang-tag {
-    font-size: 0.95em;
-    font-weight: 600;
-    color: #555;
-  }
+  .lang-tag { font-size: 0.95em; font-weight: 600; color: #555; }
   .swap-btn {
-    background: #667eea;
-    color: #fff;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    transition: transform 0.3s;
+    background: #667eea; color: #fff; border: none;
+    width: 40px; height: 40px; border-radius: 50%;
+    cursor: pointer; font-size: 16px; transition: transform 0.3s;
   }
   .swap-btn:hover { transform: rotate(180deg); }
-  .main {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-  }
+  .main { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
   .panel {
-    padding: 20px 24px;
-    min-height: 260px;
-    display: flex;
-    flex-direction: column;
+    padding: 20px 24px; min-height: 260px;
+    display: flex; flex-direction: column;
   }
   .panel.left { border-right: 1px solid #eee; }
   textarea {
-    width: 100%;
-    flex: 1;
-    border: none;
-    outline: none;
-    resize: none;
-    font-size: 1.1em;
-    line-height: 1.7;
-    font-family: inherit;
-    color: #333;
-    background: transparent;
+    width: 100%; flex: 1; border: none; outline: none; resize: none;
+    font-size: 1.1em; line-height: 1.7; font-family: inherit;
+    color: #333; background: transparent;
   }
   textarea::placeholder { color: #bbb; }
   .result {
-    flex: 1;
-    font-size: 1.1em;
-    line-height: 1.7;
-    color: #333;
-    overflow-y: auto;
+    flex: 1; font-size: 1.1em; line-height: 1.7; color: #333; overflow-y: auto;
   }
   .result.placeholder { color: #bbb; }
   .footer {
-    padding: 14px 32px;
-    background: #f8f9ff;
-    border-top: 1px solid #e8e8f0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8em;
-    color: #999;
+    padding: 14px 32px; background: #f8f9ff; border-top: 1px solid #e8e8f0;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8em; color: #999;
   }
   .copy-btn {
-    background: none;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 4px 12px;
-    cursor: pointer;
-    color: #666;
-    font-size: 0.85em;
+    background: none; border: 1px solid #ddd; border-radius: 6px;
+    padding: 4px 12px; cursor: pointer; color: #666; font-size: 0.85em;
   }
   .copy-btn:hover { background: #f0f0f5; }
-  .loading { color: #aaa; font-style: italic; }
   @media (max-width: 600px) {
     .main { grid-template-columns: 1fr; }
     .panel.left { border-right: none; border-bottom: 1px solid #eee; }
@@ -136,7 +98,7 @@
     </div>
   </div>
   <div class="footer">
-    <span>输入即自动翻译 · 由 Google Translate 提供接口</span>
+    <span>输入即自动翻译</span>
     <button class="copy-btn" onclick="copyResult()">复制结果</button>
   </div>
 </div>
@@ -148,7 +110,7 @@
 
   function debounceTranslate() {
     clearTimeout(timer);
-    timer = setTimeout(translate, 600);
+    timer = setTimeout(translate, 800);
   }
 
   async function translate() {
@@ -162,15 +124,18 @@
     out.textContent = '翻译中...';
     out.classList.remove('placeholder');
     try {
-      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${leftLang}&tl=${rightLang}&dt=t&q=${encodeURIComponent(text)}`;
+      const pair = leftLang + '|' + rightLang;
+      const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${pair}`;
       const res = await fetch(url);
       const data = await res.json();
-      let result = '';
-      data[0].forEach(item => { result += item[0]; });
-      out.textContent = result;
-      out.classList.remove('placeholder');
+      if (data.responseData && data.responseData.translatedText) {
+        out.textContent = data.responseData.translatedText;
+        out.classList.remove('placeholder');
+      } else {
+        out.textContent = '翻译失败，请重试';
+      }
     } catch (e) {
-      out.textContent = '翻译出错了，请检查网络后重试';
+      out.textContent = '网络错误，请检查连接后重试';
     }
   }
 
@@ -197,3 +162,4 @@
 </script>
 </body>
 </html>
+
