@@ -3,163 +3,152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>韩中互译</title>
+<title>韩中常用语学习卡片</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    min-height: 100vh; padding: 30px 16px;
+  }
+  .header { text-align: center; color: #fff; margin-bottom: 30px; }
+  .header h1 { font-size: 1.6em; margin-bottom: 8px; }
+  .header p { opacity: 0.8; font-size: 0.9em; }
+  .tabs {
+    display: flex; justify-content: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .tab {
+    background: rgba(255,255,255,0.2); color: #fff; border: none;
+    padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 0.9em;
+    transition: all 0.2s;
+  }
+  .tab.active { background: #fff; color: #667eea; font-weight: 600; }
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px; max-width: 900px; margin: 0 auto;
   }
   .card {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    width: 100%;
-    max-width: 900px;
-    overflow: hidden;
+    perspective: 1000px; height: 160px; cursor: pointer;
   }
-  .header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff;
-    padding: 24px 32px;
-    text-align: center;
+  .card-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform 0.5s; transform-style: preserve-3d;
   }
-  .header h1 { font-size: 1.5em; font-weight: 600; letter-spacing: 2px; }
-  .header p { font-size: 0.85em; opacity: 0.8; margin-top: 6px; }
-  .lang-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 32px;
-    background: #f8f9ff;
-    border-bottom: 1px solid #e8e8f0;
-  }
-  .lang-tag { font-size: 0.95em; font-weight: 600; color: #555; }
-  .swap-btn {
-    background: #667eea; color: #fff; border: none;
-    width: 40px; height: 40px; border-radius: 50%;
-    cursor: pointer; font-size: 16px; transition: transform 0.3s;
-  }
-  .swap-btn:hover { transform: rotate(180deg); }
-  .main { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-  .panel {
-    padding: 20px 24px; min-height: 260px;
+  .card.flipped .card-inner { transform: rotateY(180deg); }
+  .card-front, .card-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden; border-radius: 14px;
     display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 16px; text-align: center;
   }
-  .panel.left { border-right: 1px solid #eee; }
-  textarea {
-    width: 100%; flex: 1; border: none; outline: none; resize: none;
-    font-size: 1.1em; line-height: 1.7; font-family: inherit;
-    color: #333; background: transparent;
+  .card-front {
+    background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   }
-  textarea::placeholder { color: #bbb; }
-  .result {
-    flex: 1; font-size: 1.1em; line-height: 1.7; color: #333; overflow-y: auto;
+  .card-front .kr { font-size: 1.35em; color: #333; font-weight: 600; margin-bottom: 8px; }
+  .card-front .pron { font-size: 0.95em; color: #888; font-style: italic; }
+  .card-front .hint { font-size: 0.72em; color: #ccc; margin-top: 10px; }
+  .card-back {
+    background: linear-gradient(135deg, #667eea, #764ba2); color: #fff;
+    transform: rotateY(180deg); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   }
-  .result.placeholder { color: #bbb; }
-  .footer {
-    padding: 14px 32px; background: #f8f9ff; border-top: 1px solid #e8e8f0;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 0.8em; color: #999;
-  }
-  .copy-btn {
-    background: none; border: 1px solid #ddd; border-radius: 6px;
-    padding: 4px 12px; cursor: pointer; color: #666; font-size: 0.85em;
-  }
-  .copy-btn:hover { background: #f0f0f5; }
-  @media (max-width: 600px) {
-    .main { grid-template-columns: 1fr; }
-    .panel.left { border-right: none; border-bottom: 1px solid #eee; }
-  }
+  .card-back .zh { font-size: 1.3em; margin-bottom: 8px; }
+  .card-back .pron { font-size: 0.85em; opacity: 0.85; }
+  .footer { text-align: center; color: rgba(255,255,255,0.6); margin-top: 30px; font-size: 0.8em; }
 </style>
 </head>
 <body>
-<div class="card">
-  <div class="header">
-    <h1>한중 번역기</h1>
-    <p>韩中互译 · 在线翻译小工具</p>
-  </div>
-  <div class="lang-bar">
-    <span class="lang-tag" id="langLeft">한국어</span>
-    <button class="swap-btn" onclick="swapLang()">⇄</button>
-    <span class="lang-tag" id="langRight">中文</span>
-  </div>
-  <div class="main">
-    <div class="panel left">
-      <textarea id="inputText" placeholder="여기에 입력하세요..." oninput="debounceTranslate()"></textarea>
-    </div>
-    <div class="panel right">
-      <div class="result placeholder" id="outputText">翻译结果将显示在这里</div>
-    </div>
-  </div>
-  <div class="footer">
-    <span>输入即自动翻译</span>
-    <button class="copy-btn" onclick="copyResult()">复制结果</button>
-  </div>
+
+<div class="header">
+  <h1>한중 카드 · 韩中学习卡片</h1>
+  <p>正面：韩文+发音 · 点卡片翻转看中文意思</p>
 </div>
 
+<div class="tabs">
+  <button class="tab active" onclick="showTab('greet', this)">日常问候</button>
+  <button class="tab" onclick="showTab('number', this)">数字</button>
+  <button class="tab" onclick="showTab('food', this)">饮食</button>
+  <button class="tab" onclick="showTab('daily', this)">日常短句</button>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="footer">点击卡片翻转 · 共 32 张卡片</div>
+
 <script>
-  let leftLang = 'ko';
-  let rightLang = 'zh-CN';
-  let timer = null;
+  const data = {
+    greet: [
+      { kr: "안녕하세요", zh: "你好", pron: "啊尼哟哈塞哟" },
+      { kr: "안녕히 가세요", zh: "再见（对走的人说）", pron: "啊尼哟 hi 卡塞哟" },
+      { kr: "안녕히 계세요", zh: "再见（对留的人说）", pron: "啊尼哟 hi 给塞哟" },
+      { kr: "감사합니다", zh: "谢谢", pron: "康撒哈密哒" },
+      { kr: "죄송합니다", zh: "对不起", pron: "催松哈密哒" },
+      { kr: "괜찮아요", zh: "没关系/还好", pron: "宽恰那哟" },
+      { kr: "네", zh: "是/好的", pron: "内" },
+      { kr: "아니요", zh: "不是/没有", pron: "啊你哟" }
+    ],
+    number: [
+      { kr: "하나", zh: "1", pron: "哈那" },
+      { kr: "둘", zh: "2", pron: "嘟尔" },
+      { kr: "셋", zh: "3", pron: "赛" },
+      { kr: "넷", zh: "4", pron: "内" },
+      { kr: "다섯", zh: "5", pron: "塔索" },
+      { kr: "여섯", zh: "6", pron: "哟索" },
+      { kr: "일곱", zh: "7", pron: "一高" },
+      { kr: "여덟", zh: "8", pron: "哟多尔" }
+    ],
+    food: [
+      { kr: "김치", zh: "泡菜", pron: "kim七" },
+      { kr: "불고기", zh: "烤肉", pron: "铺尔高一" },
+      { kr: "비빔밥", zh: "拌饭", pron: "比比姆巴布" },
+      { kr: "냉면", zh: "冷面", pron: "内明" },
+      { kr: "떡볶이", zh: "炒年糕", pron: "ttok波gi" },
+      { kr: "삼겹살", zh: "五花肉", pron: "萨姆gop萨尔" },
+      { kr: "라면", zh: "拉面", pron: "拉明" },
+      { kr: "커피", zh: "咖啡", pron: "靠皮" }
+    ],
+    daily: [
+      { kr: "화장실이 어디예요?", zh: "洗手间在哪？", pron: "花张西里 哦迪耶哟" },
+      { kr: "이거 얼마예요?", zh: "这个多少钱？", pron: "一果 奥勒马耶哟" },
+      { kr: "조금만 주세요", zh: "请给我一点", pron: "凑根曼 朱塞哟" },
+      { kr: "또 만나요", zh: "下次见", pron: "斗 曼纳哟" },
+      { kr: "맛있게 드세요", zh: "请慢用", pron: "马西给 的塞哟" },
+      { kr: "도와주세요", zh: "请帮帮我", pron: "斗哇朱塞哟" },
+      { kr: "천천히 말씀해 주세요", zh: "请说慢一点", pron: "区区尼 马尔塞梅 朱塞哟" },
+      { kr: "한국어를 못해요", zh: "我不会韩语", pron: "韩古高勒 莫太哟" }
+    ]
+  };
 
-  function debounceTranslate() {
-    clearTimeout(timer);
-    timer = setTimeout(translate, 800);
-  }
-
-  async function translate() {
-    const text = document.getElementById('inputText').value.trim();
-    const out = document.getElementById('outputText');
-    if (!text) {
-      out.textContent = '翻译结果将显示在这里';
-      out.classList.add('placeholder');
-      return;
-    }
-    out.textContent = '翻译中...';
-    out.classList.remove('placeholder');
-    try {
-      const pair = leftLang + '|' + rightLang;
-      const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${pair}`;
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data.responseData && data.responseData.translatedText) {
-        out.textContent = data.responseData.translatedText;
-        out.classList.remove('placeholder');
-      } else {
-        out.textContent = '翻译失败，请重试';
-      }
-    } catch (e) {
-      out.textContent = '网络错误，请检查连接后重试';
-    }
-  }
-
-  function swapLang() {
-    const input = document.getElementById('inputText');
-    const output = document.getElementById('outputText');
-    const tmp = leftLang;
-    leftLang = rightLang;
-    rightLang = tmp;
-    document.getElementById('langLeft').textContent = leftLang === 'ko' ? '한국어' : '中文';
-    document.getElementById('langRight').textContent = rightLang === 'ko' ? '한국어' : '中文';
-    input.placeholder = leftLang === 'ko' ? '여기에 입력하세요...' : '在此输入中文...';
-    input.value = output.classList.contains('placeholder') ? '' : output.textContent;
-    translate();
-  }
-
-  function copyResult() {
-    const out = document.getElementById('outputText');
-    if (out.classList.contains('placeholder')) return;
-    navigator.clipboard.writeText(out.textContent).then(() => {
-      alert('已复制到剪贴板');
+  function render(cat) {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    data[cat].forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.onclick = function() { this.classList.toggle('flipped'); };
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="kr">${item.kr}</div>
+            <div class="pron">${item.pron}</div>
+            <div class="hint">点我看中文意思</div>
+          </div>
+          <div class="card-back">
+            <div class="zh">${item.zh}</div>
+            <div class="pron">${item.kr} · ${item.pron}</div>
+          </div>
+        </div>`;
+      grid.appendChild(card);
     });
   }
+
+  function showTab(cat, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    render(cat);
+  }
+
+  render('greet');
 </script>
 </body>
 </html>
-
